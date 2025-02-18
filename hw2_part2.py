@@ -46,12 +46,13 @@ with sqlite3.connect(db_file) as conn:
     print(f'Best time: {min(orig_time)/NUM_ITERATIONS:.3f} [seconds/query]')
 
     # MAKE YOUR MODIFICATIONS TO THE DATABASE HERE
-    cursor.execute('CREATE INDEX idx_track_artist_album ON track(artist_id, album_id);')
-    cursor.execute('CREATE INDEX idx_album_listens ON album(album_listens);')
-    
+    query_indexing = """
+                     CREATE INDEX idx_idArt ON artist(id);
+                     CREATE INDEX idx_album_id ON album(id);
+                     CREATE INDEX idx_listens ON album(album_listens);
+                     """
+    cursor.executescript(query_indexing)
     conn.commit()
-
-
     new_time = timeit.repeat('run_my_query(conn)', globals=globals(), number=NUM_ITERATIONS)
     print("After optimization:")
 

@@ -44,35 +44,17 @@ Paste the results of your queries for each question given in the README below:
 |    id | track_title   | artist_name   |
 |------:|:--------------|:--------------|
 | 76008 | JessicaBD     | Cody Goss     |
-
 ## Part 2
 
 - Execution time before optimization:
-
-Mean time: 0.142 [seconds/query]
-
-Best time: 0.027 [seconds/query]
-
-
+Mean time: 0.080 [seconds/query]
+Best time: 0.016 [seconds/query]
 - Execution time after optimization:
-
-Mean time: 0.128 [seconds/query]
-
-Best time   : 0.025 [seconds/query]
-
-
+Mean time: 0.070 [seconds/query]
+Best time   : 0.013 [seconds/query]
 - Briefly describe how you optimized for this query:
-
-I try to use a multi-column index
-
+artist.id is indexed as it is appended to GROUP BY and JOIN ON.
+album.id is indexed as it is appended to JOIN.
+album_listens is index as it is used to fliter the rows. 
 - Did you try anything other approaches?  How did they compare to your final answer?
-
-I try to use a single-column index:
-
-cursor.execute("CREATE INDEX idx_artist_id ON track(artist_id);")
-
-cursor.execute("CREATE INDEX idx_album_id ON track(album_id);")
-
-cursor.execute("CREATE INDEX idx_album_listens ON album(album_listens);")
-
-almost the same with a little higher mean time
+I also tried indexing track(album_id) and track(artist_id) additionally, but the final answer didn't change. Specifically, the indexing of artist.id critically speeded up the query, then the indexing of either album.id or track.album_id had the second effects on time improvement. 
